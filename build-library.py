@@ -1,0 +1,182 @@
+#!/usr/bin/env python3
+"""
+Regenerates library.html from whatever PDFs are sitting in files/.
+
+Usage:   python3 build-library.py
+Run it after adding or removing a PDF, then commit and push.
+
+Optional metadata: create files/meta.tsv with tab-separated lines
+    filename.pdf<TAB>Nice Title<TAB>One-line description
+Any PDF without an entry gets a title derived from its filename.
+Only stdlib is used, so this runs anywhere Python 3 does.
+"""
+import os
+import re
+import html
+import datetime
+import subprocess
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+FILES = os.path.join(HERE, "files")
+META = os.path.join(FILES, "meta.tsv")
+OUT = os.path.join(HERE, "library.html")
+
+AUTHOR = "{{AUTHOR}}"
+USERNAME = "{{USERNAME}}"
+
+
+def human_size(n: int) -> str:
+    for unit in ("B", "KB", "MB", "GB"):
+        if n < 1024 or unit == "GB":
+            return f"{n:.0f} {unit}" if unit == "B" else f"{n:.1f} {unit}"
+        n /= 1024
+    return f"{n:.1f} GB"
+
+
+def page_count(path: str):
+    """Best-effort page count. Tries pypdf, then pdfinfo, then a byte scan."""
+    try:
+        from pypdf import PdfReader           # if installed
+        return len(PdfReader(path).pages)
+    except Exception:
+        pass
+    try:
+        out = subprocess.run(["pdfinfo", path], capture_output=True, text=True, timeout=10)
+        m = re.search(r"^Pages:\s+(\d+)", out.stdout, re.M)
+        if m:
+            return int(m.group(1))
+    except Exception:
+        pass
+    try:                                       # crude fallback, uncompressed PDFs only
+        data = open(path, "rb").read()
+        counts = [int(x) for x in re.findall(rb"/Count\s+(\d+)", data)]
+        if counts:
+            return max(counts)
+    except Exception:
+        pass
+    return None
+
+
+def title_from_filename(name: str) -> str:
+    stem = os.path.splitext(name)[0]
+    return re.sub(r"[-_]+", " ", stem).strip().title()
+
+
+def load_meta():
+    meta = {}
+    if not os.path.exists(META):
+        return meta
+    with open(META, encoding="utf-8") as f:
+        for line in f:
+            line = line.rstrip("\n")
+            if not line.strip() or line.lstrip().startswith("#"):
+                continue
+            parts = line.split("\t")
+            fn = parts[0].strip()
+            meta[fn] = {
+                "title": parts[1].strip() if len(parts) > 1 and parts[1].strip() else title_from_filename(fn),
+                "desc": parts[2].strip() if len(parts) > 2 else "",
+            }
+    return meta
+
+
+def main():
+    os.makedirs(FILES, exist_ok=True)
+    meta = load_meta()
+    pdfs = sorted(f for f in os.listdir(FILES) if f.lower().endswith(".pdf"))
+
+    rows = []
+    for fn in pdfs:
+        path = os.path.join(FILES, fn)
+        st = os.stat(path)
+        info = meta.get(fn, {"title": title_from_filename(fn), "desc": ""})
+        pages = page_count(path)
+        bits = [human_size(st.st_size)]
+        if pages:
+            bits.append(f"{pages} page{'s' if pages != 1 else ''}")
+        mtime = datetime.date.fromtimestamp(st.st_mtime)
+
+        rows.append(f"""  <a class="post" href="/files/{html.escape(fn)}">
+    <div class="meta">
+      <time datetime="{mtime.isoformat()}">{mtime.strftime('%-d %b %Y')}</time>
+      <span class="tag">pdf</span>
+      <span class="tag">{html.escape(' · '.join(bits))}</span>
+    </div>
+    <h2>{html.escape(info['title'])}</h2>
+    {f"<p>{html.escape(info['desc'])}</p>" if info['desc'] else ""}
+    <span class="readmore">Open PDF &rarr;</span>
+  </a>""")
+
+    body = "\n\n".join(rows) if rows else (
+        '  <p style="color:var(--tx-3)">No PDFs yet. Drop one into <code>files/</code> '
+        'and run <code>python3 build-library.py</code> again.</p>'
+    )
+
+    page = f"""<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Library — {AUTHOR}</title>
+<meta name="description" content="Downloadable PDFs, papers and notes by {AUTHOR}.">
+<link rel="stylesheet" href="assets/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='28' fill='%2356a8ff'/></svg>">
+</head>
+<body>
+
+<div id="top"><div class="inner">
+  <a class="brand" href="/"><span class="dot"></span>{AUTHOR}</a>
+  <nav>
+    <a href="/">Posts</a>
+    <a href="/library.html">Library</a>
+    <a href="/about.html">About</a>
+    <button class="tbtn" id="themebtn" title="Toggle theme" aria-label="Toggle theme">&#9680;</button>
+  </nav>
+</div></div>
+
+<div class="wrap">
+  <header class="hero">
+    <h1>Library</h1>
+    <p>PDFs, slides and notes. All free to download — click to open in your browser.</p>
+  </header>
+
+  <p class="sec-label">Files</p>
+
+{body}
+
+  <footer>
+    <p>&copy; <span id="yr">2026</span> {AUTHOR}.</p>
+  </footer>
+</div>
+
+<!-- GENERATED BY build-library.py — edits here are overwritten. Change files/meta.tsv instead. -->
+<script>
+(function(){{
+  var root = document.documentElement;
+  try {{
+    var saved = localStorage.getItem("blog-theme");
+    if (saved) root.dataset.theme = saved;
+    else if (matchMedia("(prefers-color-scheme: light)").matches) root.dataset.theme = "light";
+  }} catch(e){{}}
+  document.getElementById("themebtn").onclick = function(){{
+    root.dataset.theme = root.dataset.theme === "dark" ? "light" : "dark";
+    try {{ localStorage.setItem("blog-theme", root.dataset.theme); }} catch(e){{}}
+  }};
+  document.getElementById("yr").textContent = new Date().getFullYear();
+}})();
+</script>
+</body>
+</html>
+"""
+    with open(OUT, "w", encoding="utf-8") as f:
+        f.write(page)
+
+    print(f"Wrote library.html with {len(pdfs)} file(s).")
+    for fn in pdfs:
+        print(f"  /files/{fn}")
+    if pdfs:
+        print("\nNext: git add -A && git commit -m 'add pdfs' && git push")
+
+
+if __name__ == "__main__":
+    main()
