@@ -1,7 +1,6 @@
 # One line per PDF:  filename.pdf <TAB> Title <TAB> Description
 # Tabs, not spaces. Lines starting with # are ignored.
 # Any PDF not listed here still shows up, with a title guessed from its filename.
-transformer-notes.pdf	Transformer Internals — Working Notes	Hand-drawn diagrams and derivations from reading the original paper.
 01_PagedAttention_vLLM.pdf	PagedAttention & vLLM	Paper notes on paged KV-cache memory management for LLM serving.
 02_Sarathi_Serve_ChunkedPrefill.pdf	Sarathi-Serve: Chunked Prefill	Paper notes on chunked prefills and stall-free batching to balance throughput and latency.
 03_DistServe_Disaggregation.pdf	DistServe: Prefill/Decode Disaggregation	Paper notes on splitting prefill and decode across GPUs to optimize goodput.
