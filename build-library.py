@@ -21,8 +21,8 @@ FILES = os.path.join(HERE, "files")
 META = os.path.join(FILES, "meta.tsv")
 OUT = os.path.join(HERE, "library.html")
 
-AUTHOR = "{{AUTHOR}}"
-USERNAME = "{{USERNAME}}"
+AUTHOR = "Ayush"
+USERNAME = "SutraStack"
 
 
 def human_size(n: int) -> str:
