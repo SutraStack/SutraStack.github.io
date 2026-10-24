@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ayush — Notes on systems, code, AI and Inference</title>
+<meta name="description" content="Notes on systems, code, AI and Inference — writing about systems, inference, and how things actually work under the hood.">
+<link rel="stylesheet" href="assets/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='28' fill='%2356a8ff'/></svg>">
+<meta property="og:title" content="Ayush — Notes on systems, code, AI and Inference">
+<meta property="og:description" content="Writing about systems, inference, and how things actually work under the hood.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://SutraStack.github.io/">
+</head>
+<body>
+
+<div id="top"><div class="inner">
+  <a class="brand" href="/"><span class="dot"></span>Ayush</a>
+  <nav>
+    <a href="/">Posts</a>
+    <a href="/about.html">About</a>
+    <a href="https://github.com/SutraStack" target="_blank" rel="noopener">GitHub</a>
+    <button class="tbtn" id="themebtn" title="Toggle theme" aria-label="Toggle theme">◐</button>
+  </nav>
+</div></div>
+
+<div class="wrap">
+
+  <header class="hero">
+    <h1>Notes on systems, code, AI and Inference</h1>
+    <p>I take apart complex systems and write up how they actually work — the architecture,
+       the trade-offs, and the parts the README leaves out.</p>
+    <div class="hero-links">
+      <a href="https://github.com/SutraStack" target="_blank" rel="noopener">GitHub</a>
+      <a href="/about.html">About me</a>
+      <a href="mailto:hello@example.com">Email</a>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       POSTS. To add a new one, copy a block below and change it.
+       Newest post goes at the TOP.
+       ============================================================ -->
+  <p class="sec-label">Writing</p>
+
+  <a class="post" href="/posts/deepinfer-explained.html">
+    <div class="meta">
+      <time datetime="2026-10-24">24 Oct 2026</time>
+      <span class="tag">inference</span>
+      <span class="tag">deep dive</span>
+    </div>
+    <h2>DeepInfer Explained — a complete field guide to DeepSeek's inference engine</h2>
+    <p>Everything in the DeepInfer repository, explained from zero: the architecture, a map of all
+       342 files, the request lifecycle, and every concept it drops — FlashMLA, DeepGEMM, DeepEP,
+       DSpark, SWA bounded replay, EPLB and the rest.</p>
+    <span class="readmore">Read →</span>
+  </a>
+
+  <!-- Copy this block for your next post:
+  <a class="post" href="/posts/my-second-post.html">
+    <div class="meta">
+      <time datetime="2026-11-01">1 Nov 2026</time>
+      <span class="tag">topic</span>
+    </div>
+    <h2>Post title goes here</h2>
+    <p>One or two sentences that make someone want to click.</p>
+    <span class="readmore">Read →</span>
+  </a>
+  -->
+
+  <footer>
+    <p>© <span id="yr">2026</span> Ayush. Built as plain HTML, hosted on GitHub Pages.</p>
+    <p><a href="https://github.com/SutraStack/SutraStack.github.io" target="_blank" rel="noopener">Source for this site</a></p>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var root = document.documentElement;
+  try {
+    var saved = localStorage.getItem("blog-theme");
+    if (saved) root.dataset.theme = saved;
+    else if (matchMedia("(prefers-color-scheme: light)").matches) root.dataset.theme = "light";
+  } catch(e){}
+  document.getElementById("themebtn").onclick = function(){
+    root.dataset.theme = root.dataset.theme === "dark" ? "light" : "dark";
+    try { localStorage.setItem("blog-theme", root.dataset.theme); } catch(e){}
+  };
+  document.getElementById("yr").textContent = new Date().getFullYear();
+})();
+</script>
+</body>
+</html>

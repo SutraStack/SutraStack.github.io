@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>About — Ayush</title>
+<meta name="description" content="About Ayush.">
+<link rel="stylesheet" href="assets/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='28' fill='%2356a8ff'/></svg>">
+</head>
+<body>
+
+<div id="top"><div class="inner">
+  <a class="brand" href="/"><span class="dot"></span>Ayush</a>
+  <nav>
+    <a href="/">Posts</a>
+    <a href="/about.html">About</a>
+    <a href="https://github.com/SutraStack" target="_blank" rel="noopener">GitHub</a>
+    <button class="tbtn" id="themebtn" title="Toggle theme" aria-label="Toggle theme">◐</button>
+  </nav>
+</div></div>
+
+<div class="wrap prose">
+  <header class="hero">
+    <h1>About</h1>
+  </header>
+
+  <p>Hi — I'm Ayush. <em>(Replace this with two or three sentences: what you work on,
+     what you're curious about, and what someone will find here.)</em></p>
+
+  <h2>What I write about</h2>
+  <ul>
+    <li>How large systems actually work once you read the source</li>
+    <li>Inference, performance, and the engineering behind making models cheap to run</li>
+    <li>Write-ups of things I had to figure out the hard way</li>
+  </ul>
+
+  <h2>Elsewhere</h2>
+  <ul>
+    <li><a href="https://github.com/SutraStack" target="_blank" rel="noopener">GitHub</a></li>
+    <li><a href="mailto:hello@example.com">Email</a></li>
+  </ul>
+
+  <footer>
+    <p>© <span id="yr">2026</span> Ayush.</p>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var root = document.documentElement;
+  try {
+    var saved = localStorage.getItem("blog-theme");
+    if (saved) root.dataset.theme = saved;
+    else if (matchMedia("(prefers-color-scheme: light)").matches) root.dataset.theme = "light";
+  } catch(e){}
+  document.getElementById("themebtn").onclick = function(){
+    root.dataset.theme = root.dataset.theme === "dark" ? "light" : "dark";
+    try { localStorage.setItem("blog-theme", root.dataset.theme); } catch(e){}
+  };
+  document.getElementById("yr").textContent = new Date().getFullYear();
+})();
+</script>
+</body>
+</html>

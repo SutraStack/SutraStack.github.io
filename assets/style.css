@@ -1,0 +1,94 @@
+/* ============================================================
+   Shared blog styling. Same design tokens as the posts, so the
+   homepage and the articles read as one site.
+   ============================================================ */
+:root{
+  --bg:#0a0e1a; --bg-2:#0e1424; --bg-3:#131a2d; --panel:#111829; --panel-2:#161f35;
+  --line:#243149; --line-2:#2e3c58;
+  --tx:#e6ecf7; --tx-2:#aab6cd; --tx-3:#75839d;
+  --acc:#56a8ff; --acc-2:#9d7bff; --acc-3:#2ee6a8; --warn:#ffb648;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+  --sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Inter,Roboto,"Helvetica Neue",Arial,sans-serif;
+  --rad:14px;
+  --shadow:0 2px 6px rgba(0,0,0,.3),0 12px 32px -8px rgba(0,0,0,.45);
+}
+html[data-theme="light"]{
+  --bg:#f7f8fb; --bg-2:#ffffff; --bg-3:#eef1f7; --panel:#ffffff; --panel-2:#f3f5fa;
+  --line:#dde3ee; --line-2:#c7d0e0;
+  --tx:#16203a; --tx-2:#49566f; --tx-3:#78849b;
+  --acc:#1763d6; --acc-2:#6d41e0; --acc-3:#07875e; --warn:#a86500;
+  --shadow:0 1px 3px rgba(16,32,64,.08),0 10px 28px -10px rgba(16,32,64,.18);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:var(--sans);
+  font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased}
+a{color:var(--acc);text-decoration:none}
+a:hover{text-decoration:underline}
+code{font-family:var(--mono);font-size:.875em;background:var(--bg-3);border:1px solid var(--line);
+  border-radius:5px;padding:1px 5px;overflow-wrap:anywhere}
+h1,h2,h3{line-height:1.2;margin:0;font-weight:680;letter-spacing:-.02em}
+p{margin:0 0 1em}
+
+.wrap{max-width:780px;margin:0 auto;padding:0 24px}
+
+/* ---- top bar ---- */
+#top{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:14px;height:60px;
+  padding:0 24px;background:color-mix(in srgb,var(--bg) 88%,transparent);
+  backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+#top .inner{max-width:780px;margin:0 auto;width:100%;display:flex;align-items:center;gap:16px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.02em;color:var(--tx)}
+.brand:hover{text-decoration:none}
+.brand .dot{width:22px;height:22px;border-radius:7px;flex:0 0 auto;
+  background:linear-gradient(135deg,var(--acc),var(--acc-2));
+  box-shadow:0 0 18px -4px var(--acc)}
+#top nav{margin-left:auto;display:flex;gap:18px;align-items:center}
+#top nav a{color:var(--tx-2);font-size:14.5px}
+#top nav a:hover{color:var(--tx);text-decoration:none}
+.tbtn{background:var(--bg-3);border:1px solid var(--line);color:var(--tx-2);border-radius:9px;
+  height:32px;width:32px;cursor:pointer;font-size:14px;line-height:1}
+.tbtn:hover{border-color:var(--acc);color:var(--tx)}
+
+/* ---- hero ---- */
+header.hero{padding:72px 0 44px}
+header.hero h1{font-size:42px;margin-bottom:14px}
+header.hero p{font-size:18.5px;color:var(--tx-2);max-width:62ch;margin-bottom:0}
+.hero-links{display:flex;gap:14px;flex-wrap:wrap;margin-top:22px}
+.hero-links a{font-size:14.5px;background:var(--bg-3);border:1px solid var(--line);
+  border-radius:9px;padding:7px 14px;color:var(--tx-2)}
+.hero-links a:hover{border-color:var(--acc);color:var(--tx);text-decoration:none}
+
+/* ---- post list ---- */
+.sec-label{font:700 11px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;
+  color:var(--tx-3);margin:48px 0 18px}
+.post{display:block;padding:22px 24px;margin-bottom:16px;border:1px solid var(--line);
+  border-radius:var(--rad);background:var(--panel);transition:border-color .15s,transform .15s}
+.post:hover{border-color:var(--acc);text-decoration:none;transform:translateY(-2px);box-shadow:var(--shadow)}
+.post h2{font-size:21px;color:var(--tx);margin-bottom:8px}
+.post .meta{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.post time{font:600 12px/1 var(--mono);color:var(--tx-3);letter-spacing:.03em}
+.tag{font:700 10px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;padding:4px 7px;
+  border-radius:6px;border:1px solid color-mix(in srgb,var(--acc) 40%,transparent);
+  color:var(--acc);background:color-mix(in srgb,var(--acc) 12%,transparent)}
+.post p{color:var(--tx-2);font-size:15px;margin:0}
+.readmore{color:var(--acc);font-size:14px;font-weight:600;margin-top:12px;display:inline-block}
+
+/* ---- prose (for about.html / simple posts) ---- */
+.prose h2{font-size:24px;margin:36px 0 12px}
+.prose h3{font-size:18px;margin:28px 0 8px}
+.prose ul{padding-left:1.2em;color:var(--tx-2)}
+.prose li{margin:.35em 0}
+.prose p{color:var(--tx-2)}
+
+footer{border-top:1px solid var(--line);margin-top:72px;padding:28px 0 60px;
+  color:var(--tx-3);font-size:13.5px}
+footer a{color:var(--tx-2)}
+
+@media(max-width:640px){
+  header.hero{padding:48px 0 32px}
+  header.hero h1{font-size:32px}
+  header.hero p{font-size:16.5px}
+  #top nav{gap:12px}
+  #top nav a{font-size:13.5px}
+  .wrap,#top{padding-left:18px;padding-right:18px}
+}
